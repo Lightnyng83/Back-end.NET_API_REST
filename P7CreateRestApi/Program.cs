@@ -1,5 +1,8 @@
 using Dot.Net.WebApi.Data;
 using Microsoft.EntityFrameworkCore;
+using P7CreateRestApi.Mapping;
+using P7CreateRestApi.Repositories;
+using P7CreateRestApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -10,6 +13,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+#region Services
+
+builder.Services.AddScoped<IBidListService, BidListService>();
+builder.Services.AddScoped<IBidListRepository, BidListRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+#endregion
+
 
 builder.Services.AddDbContext<LocalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
