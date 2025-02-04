@@ -1,6 +1,6 @@
-namespace Dot.Net.WebApi.Domain
+namespace Dot.Net.WebApi.Model
 {
-    public class RuleName
+    public class RuleNameViewModel
     {
         public int Id {get;set;}
         public string Name {get;set;}

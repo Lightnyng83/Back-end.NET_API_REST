@@ -2,7 +2,7 @@
 using Dot.Net.WebApi.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace P7CreateRestApi.Repositories
+namespace P7CreateRestApi.Data.Repositories
 {
     public class BidListRepository : IBidListRepository
     {
@@ -13,10 +13,10 @@ namespace P7CreateRestApi.Repositories
             _dbContext = dbContext;
         }
 
-        public void Add(BidList bidList)
+        public async Task AddAsync(BidList bidList)
         {
-            _dbContext.BidLists.Add(bidList);
-            _dbContext.SaveChanges();
+            await _dbContext.BidLists.AddAsync(bidList);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<BidList>> FindAll()
@@ -24,25 +24,25 @@ namespace P7CreateRestApi.Repositories
             return await _dbContext.BidLists.ToListAsync();
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var del = _dbContext.BidLists.FirstOrDefault(x => x.BidListId == id);
+            var del = await _dbContext.BidLists.FirstOrDefaultAsync(x => x.BidListId == id);
             if (del != null)
             {
                 _dbContext.Remove(del);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public BidList FindById(int id)
+        public async Task<BidList> FindByIdAsync(int id)
         {
-            return _dbContext.BidLists.FirstOrDefault(x => x.BidListId == id);
+            return await _dbContext.BidLists.FirstOrDefaultAsync(x => x.BidListId == id);
         }
 
-        public void Update(BidList bidList)
+        public async Task Update(BidList bidList)
         {
             _dbContext.BidLists.Update(bidList);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

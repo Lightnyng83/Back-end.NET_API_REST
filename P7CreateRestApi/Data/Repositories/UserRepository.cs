@@ -2,7 +2,7 @@ using Dot.Net.WebApi.Data;
 using Dot.Net.WebApi.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dot.Net.WebApi.Repositories
+namespace P7CreateRestApi.Data.Repositories
 {
     public class UserRepository
     {
@@ -13,7 +13,7 @@ namespace Dot.Net.WebApi.Repositories
             DbContext = dbContext;
         }
 
-        public User FindByUserName(string userName)
+        public User? FindByUserName(string userName)
         {
             return DbContext.Users.Where(user => user.Username == userName)
                                   .FirstOrDefault();

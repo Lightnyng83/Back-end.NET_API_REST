@@ -1,8 +1,8 @@
 using Dot.Net.WebApi.Data;
 using Microsoft.EntityFrameworkCore;
+using P7CreateRestApi.Data.Repositories;
+using P7CreateRestApi.Data.Services;
 using P7CreateRestApi.Mapping;
-using P7CreateRestApi.Repositories;
-using P7CreateRestApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;

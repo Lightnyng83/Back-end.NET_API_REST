@@ -1,12 +1,13 @@
-using AutoMapper;
+ï»¿using AutoMapper;
 using Dot.Net.WebApi.Domain;
+using Dot.Net.WebApi.Model;
 using Microsoft.AspNetCore.Mvc;
-using P7CreateRestApi.Services;
+using P7CreateRestApi.Data.Services;
 
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("bidlists")]
     public class BidListController : ControllerBase
     {
         private readonly IBidListService _bidListService;
@@ -19,61 +20,76 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("validate")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Validate([FromBody] BidList bidList)
+        public async Task<IActionResult> Create([FromBody] BidListViewModel bidListViewModel)
         {
-            // TODO: check data valid and save to db, after saving return bid list
-            if (bidList == null || !ModelState.IsValid)
+            if (bidListViewModel == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
-            _bidListService.Add(bidList);
-            var bidLists = await _bidListService.FindAll();
-            return CreatedAtAction(nameof(Validate), new { id = bidList.BidListId }, bidLists);
+
+            BidList bidList = _mapper.Map<BidList>(bidListViewModel);
+
+            await _bidListService.AddAsync(bidList); 
+
+            return CreatedAtAction(nameof(Create), new { id = bidList.BidListId }, bidList);
         }
 
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetEntity(int id)
         {
-            return Ok();
+            var bidList = await _bidListService.FindByIdAsync(id); 
+            if (bidList == null)
+            {
+                return NotFound($"Bid with ID {id} not found.");
+            }
+            var bidListViewModel = _mapper.Map<BidListViewModel>(bidList);
+
+            return Ok(bidListViewModel);
         }
 
-        [HttpPut]
-        [Route("update/{id}")]
-        public IActionResult UpdateBid(int id, [FromBody] BidList bidList)
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateBid(int id, [FromBody] BidListViewModel bidList)
         {
-            // TODO: check required fields, if valid call service to update Bid and return list Bid
             if (bidList == null || id <= 0)
             {
                 return BadRequest("Invalid data provided.");
             }
 
-            var existingBid = _bidListService.FindById(id); // Récupérer l'existant
+            var existingBid = await _bidListService.FindByIdAsync(id); 
             if (existingBid == null)
             {
                 return NotFound($"Bid with ID {id} not found.");
             }
 
-            // Mise à jour des champs
             _mapper.Map(bidList, existingBid);
-            
-            // Appel du service pour mettre à jour
-            _bidListService.Update(existingBid);
-            _bidListService.FindAll();
-            return Ok();
+
+            await _bidListService.UpdateAsync(existingBid); 
+
+            return Ok(existingBid);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public IActionResult DeleteBid(int id)
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteBid(int id)
         {
-            _bidListService.Delete(id);
+            var existingBid = await _bidListService.FindByIdAsync(id); 
+            if (existingBid == null)
+            {
+                return NotFound($"Bid with ID {id} not found.");
+            }
+
+            await _bidListService.DeleteAsync(id); 
+
             return NoContent();
         }
+
     }
 }
