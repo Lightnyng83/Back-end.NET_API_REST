@@ -12,39 +12,39 @@ public class LoginController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly IPasswordHasher<IdentityUser> _passwordHasher;
 
-    public LoginController(UserManager<IdentityUser> userManager, IConfiguration configuration)
+    public LoginController(UserManager<IdentityUser> userManager, IConfiguration configuration, IPasswordHasher<IdentityUser> passwordHasher)
     {
         _userManager = userManager;
         _configuration = configuration;
+        _passwordHasher = passwordHasher;
     }
 
     [HttpPost]
-    [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        // Validation des données envoyées
-        if (!ModelState.IsValid)
-        {
-            return BadRequest("Invalid login request");
-        }
-
-        // Recherche de l'utilisateur
         var user = await _userManager.FindByNameAsync(model.Username);
-        if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+        if (user == null)
         {
-            return Unauthorized("Invalid username or password");
+            return Unauthorized("Invalid username or password.");
         }
 
-        // Génération du jeton JWT
-        var token = GenerateJwtToken(user);
-
-        return Ok(new
+        // Vérifie le mot de passe
+        var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
+        if (result == PasswordVerificationResult.Success)
         {
-            token,
-            expiration = DateTime.UtcNow.AddHours(1)
-        });
+            var token = GenerateJwtToken(user);
+            return Ok(new
+            {
+                token,
+                expiration = DateTime.UtcNow.AddHours(1)
+            });
+        }
+
+        return Unauthorized("Invalid username or password.");
     }
+    
 
     private string GenerateJwtToken(IdentityUser user)
     {

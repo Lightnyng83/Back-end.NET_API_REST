@@ -1,9 +1,11 @@
 using AutoMapper;
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Data.Repositories;
 using P7CreateRestApi.Data.Services;
+using P7CreateRestApi.Models;
 
 namespace Dot.Net.WebApi.Controllers
 {
@@ -13,29 +15,48 @@ namespace Dot.Net.WebApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IPasswordHasher<IdentityUser> _passwordHasher;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IMapper mapper, IPasswordHasher<IdentityUser> passwordHasher, UserManager<IdentityUser> userManager)
         {
             _userService = userService;
             _mapper = mapper;
+            _passwordHasher = passwordHasher;
+            _userManager = userManager;
         }
 
 
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Create([FromBody] UserViewModel user)
+        public async Task<IActionResult> Create([FromBody] UserViewModel model)
         {
-            if (user == null || !ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            User newUser = _mapper.Map<User>(user);
+            // Crée un utilisateur
+            var user = new IdentityUser
+            {
+                UserName = model.Username,
+                
+            };
 
-            await _userService.AddAsync(newUser);
+            // Hache le mot de passe
+            user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
 
-            return CreatedAtAction(nameof(Create), new { id = newUser.Id }, newUser);
+            // Sauvegarde l'utilisateur avec UserManager
+            var result = await _userManager.CreateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok("User created successfully.");
+            }
+
+            // Gestion des erreurs
+            return BadRequest(result.Errors);
         }
 
 
