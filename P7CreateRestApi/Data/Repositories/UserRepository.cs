@@ -12,13 +12,23 @@ namespace P7CreateRestApi.Data.Repositories
         {
             DbContext = dbContext;
         }
-
-        public async Task<User?> FindByUserNameAsync(string userName)
+        public async Task AddAsync(User user)
         {
-            return await DbContext.Users.Where(user => user.Username == userName)
+            await DbContext.Users.AddAsync(user);
+            await DbContext.SaveChangesAsync();
+        }
+        public async Task<User?> FindByIdAsync(int id)
+        {
+            return await DbContext.Users.Where(user => user.Id == id)
                                   .FirstOrDefaultAsync();
         }
 
+        public async Task UpdateAsync(User user)
+        {
+            DbContext.Users.Update(user);
+            await DbContext.SaveChangesAsync();
+        }
+        
         public async Task DeleteAsync(int id)
         {
             var del = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -28,18 +38,6 @@ namespace P7CreateRestApi.Data.Repositories
                 await DbContext.SaveChangesAsync();
             }
 
-        }
-
-        public async Task AddAsync(User user)
-        {
-            await DbContext.Users.AddAsync(user);
-            await DbContext.SaveChangesAsync();
-        }
-
-        public async Task<User?> FindByIdAsync(int id)
-        {
-            return await DbContext.Users.Where(user => user.Id == id)
-                                  .FirstOrDefaultAsync();
-        }
+        }  
     }
 }

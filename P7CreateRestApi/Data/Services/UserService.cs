@@ -16,7 +16,7 @@ namespace P7CreateRestApi.Data.Services
             _userRepository = userRepository;
         }
 
-        public async Task Update(User user)
+        public async Task UpdateAsync(User user)
         {
             await _userRepository.UpdateAsync(user);
         }

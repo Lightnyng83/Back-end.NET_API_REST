@@ -8,7 +8,7 @@ using P7CreateRestApi.Data.Services;
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("curves")]
     public class CurveController : ControllerBase
     {
         private readonly ICurvePointService _curvePointService;
@@ -20,15 +20,6 @@ namespace Dot.Net.WebApi.Controllers
             _curvePointService = curvePointService;
             _mapper = mapper;
         }
-
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var curves = await _curvePointService.FindAllAsync();
-            var curveviewModel = _mapper.Map<List<CurvePointViewModel>>(curves);
-            return Ok(curveviewModel);
-        }      
 
         [HttpPost]
         [ProducesResponseType(201)]

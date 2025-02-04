@@ -1,59 +1,93 @@
+using AutoMapper;
 using Dot.Net.WebApi.Domain;
+using Dot.Net.WebApi.Model;
 using Microsoft.AspNetCore.Mvc;
+using P7CreateRestApi.Data.Services;
 
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("trades")]
     public class TradeController : ControllerBase
     {
-        // TODO: Inject Trade service
+        private readonly ITradeService _tradeService;
+        private readonly IMapper _mapper;
 
-        [HttpGet]
-        [Route("list")]
-        public IActionResult Home()
+        public TradeController(ITradeService tradeService, IMapper mapper)
         {
-            // TODO: find all Trade, add to model
-            return Ok();
+            _tradeService = tradeService;
+            _mapper = mapper;
         }
 
-        [HttpGet]
-        [Route("add")]
-        public IActionResult AddTrade([FromBody]Trade trade)
-        {
-            return Ok();
-        }
 
-        [HttpGet]
-        [Route("validate")]
-        public IActionResult Validate([FromBody]Trade trade)
-        {
-            // TODO: check data valid and save to db, after saving return Trade list
-            return Ok();
-        }
-
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
-        {
-            // TODO: get Trade by Id and to model then show to the form
-            return Ok();
-        }
 
         [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateTrade(int id, [FromBody] Trade trade)
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> CreateTrade([FromBody]TradeViewModel tradeViewModel)
         {
-            // TODO: check required fields, if valid call service to update Trade and return Trade list
-            return Ok();
+            if(tradeViewModel == null || !ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            Trade trade = _mapper.Map<Trade>(tradeViewModel);
+            await _tradeService.AddTradeAsync(trade);
+            return CreatedAtAction(nameof(CreateTrade), new { id = trade.TradeId }, trade);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteTrade(int id)
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetTrade(int id)
         {
-            // TODO: Find Trade by Id and delete the Trade, return to Trade list
-            return Ok();
+            var trade = await _tradeService.GetTradeByIdAsync(id);
+            if (trade == null)
+            {
+                return NotFound($"Trade with ID {id} not found.");
+            }
+            var tradeViewModel = _mapper.Map<TradeViewModel>(trade);
+
+            return Ok(tradeViewModel);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateTrade(int id, [FromBody] TradeViewModel tradeViewModel)
+        {
+            if (tradeViewModel == null || id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var existingTrade = await _tradeService.GetTradeByIdAsync(id);
+            if (existingTrade == null)
+            {
+                return NotFound($"Trade with ID {id} not found.");
+            }
+            
+            _mapper.Map(tradeViewModel, existingTrade);
+            await _tradeService.UpdateTradeAsync(existingTrade);
+
+            var updatedTrade = _mapper.Map<TradeViewModel>(existingTrade);
+            return Ok(updatedTrade);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteTrade(int id)
+        {
+            var existingTrade = await _tradeService.GetTradeByIdAsync(id);
+            if (existingTrade == null)
+            {
+                return NotFound($"Trade with ID {id} not found.");
+            }
+            await _tradeService.DeleteTradeAsync(id);
+
+            return NoContent();
         }
     }
 }

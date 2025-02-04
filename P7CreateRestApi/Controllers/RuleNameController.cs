@@ -7,7 +7,7 @@ using P7CreateRestApi.Data.Services;
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("rulenames")]
     public class RuleNameController : ControllerBase
     {
         private readonly IRuleNameService _ruleNameService;
@@ -18,16 +18,6 @@ namespace Dot.Net.WebApi.Controllers
             _ruleNameService = ruleNameService;
             _mapper = mapper;
         }
-
-        [HttpGet]
-        public IActionResult Home()
-        {
-            var ruleNames = _ruleNameService.FindAllAsync();
-            var ruleNameViewModels = _mapper.Map<List<RuleNameViewModel>>(ruleNames);
-            return Ok(ruleNameViewModels);
-        }
-
-
 
         [HttpPost]
         [ProducesResponseType(201)]

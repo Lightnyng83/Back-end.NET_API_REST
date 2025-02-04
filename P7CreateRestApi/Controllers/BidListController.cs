@@ -7,7 +7,7 @@ using P7CreateRestApi.Data.Services;
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("bidlists")]
     public class BidListController : ControllerBase
     {
         private readonly IBidListService _bidListService;
@@ -39,7 +39,7 @@ namespace Dot.Net.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetEntity(int id)
+        public async Task<IActionResult> ReadEntity(int id)
         {
             var bidList = await _bidListService.FindByIdAsync(id); 
             if (bidList == null)

@@ -8,7 +8,7 @@ using P7CreateRestApi.Data.Services;
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("users")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

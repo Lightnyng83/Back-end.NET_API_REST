@@ -7,7 +7,7 @@ using P7CreateRestApi.Data.Services;
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("ratings")]
     public class RatingController : ControllerBase
     {
         private readonly IRatingService _ratingService;
@@ -19,14 +19,7 @@ namespace Dot.Net.WebApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        [HttpGet("home")]
-        public async Task <IActionResult> Home()
-        {
-            var ratings = await _ratingService.FindAllAsync();
-            var ratingViewModels = _mapper.Map<List<Rating>>(ratings);
-            return Ok(ratingViewModels);
-        }
+        
 
         [HttpPost]
         [ProducesResponseType(201)]
