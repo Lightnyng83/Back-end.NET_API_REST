@@ -142,3 +142,13 @@ C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7Cre
 C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\obj\Debug\net8.0\P7CreateRestApi.Test.pdb
 C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\obj\Debug\net8.0\P7CreateRestApi.Test.genruntimeconfig.cache
 C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\obj\Debug\net8.0\ref\P7CreateRestApi.Test.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Lightnyng83\Desktop\OpenClassrooms\Projet 7\Back-end.NET_API_REST\P7CreateRestApi.Test\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
