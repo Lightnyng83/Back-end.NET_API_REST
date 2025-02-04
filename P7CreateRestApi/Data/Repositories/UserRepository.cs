@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace P7CreateRestApi.Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         public LocalDbContext DbContext { get; }
 
@@ -13,24 +13,33 @@ namespace P7CreateRestApi.Data.Repositories
             DbContext = dbContext;
         }
 
-        public User? FindByUserName(string userName)
+        public async Task<User?> FindByUserNameAsync(string userName)
         {
-            return DbContext.Users.Where(user => user.Username == userName)
-                                  .FirstOrDefault();
+            return await DbContext.Users.Where(user => user.Username == userName)
+                                  .FirstOrDefaultAsync();
         }
 
-        public async Task<List<User>> FindAll()
+        public async Task DeleteAsync(int id)
         {
-            return await DbContext.Users.ToListAsync();
+            var del = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (del != null)
+            {
+                DbContext.Remove(del);
+                await DbContext.SaveChangesAsync();
+            }
+
         }
 
-        public void Add(User user)
+        public async Task AddAsync(User user)
         {
+            await DbContext.Users.AddAsync(user);
+            await DbContext.SaveChangesAsync();
         }
 
-        public User FindById(int id)
+        public async Task<User?> FindByIdAsync(int id)
         {
-            return null;
+            return await DbContext.Users.Where(user => user.Id == id)
+                                  .FirstOrDefaultAsync();
         }
     }
 }
