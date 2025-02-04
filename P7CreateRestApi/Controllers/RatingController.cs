@@ -20,19 +20,18 @@ namespace Dot.Net.WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Home()
+        [HttpGet("home")]
+        public async Task <IActionResult> Home()
         {
-            var ratings = _ratingService.FindAllAsync();
+            var ratings = await _ratingService.FindAllAsync();
             var ratingViewModels = _mapper.Map<List<Rating>>(ratings);
             return Ok(ratingViewModels);
         }
 
-        
-
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public IActionResult Create([FromBody]RatingViewModel ratingViewModel)
+        public async Task<IActionResult> Create([FromBody]RatingViewModel ratingViewModel)
         {
             if(ratingViewModel == null || !ModelState.IsValid)
             {
@@ -40,16 +39,16 @@ namespace Dot.Net.WebApi.Controllers
             }
 
             Rating rating = _mapper.Map<Rating>(ratingViewModel);
-            _ratingService.AddAsync(rating);
+            await _ratingService.AddAsync(rating);
             return CreatedAtAction(nameof(Create), new { id = rating.Id }, rating);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public IActionResult GetEntity(int id)
+        public async Task<IActionResult> GetEntity(int id)
         {
-            var rating = _ratingService.FindByIdAsync(id);
+            var rating = await _ratingService.FindByIdAsync(id);
             if (rating == null)
             {
                 return NotFound($"Rating with ID {id} not found.");
@@ -80,8 +79,9 @@ namespace Dot.Net.WebApi.Controllers
 
             await _ratingService.UpdateAsync(existingRating);
 
+            var updatedRating = _mapper.Map<RatingViewModel>(existingRating);
 
-            return Ok(existingRating);
+            return Ok(updatedRating);
         }
 
         [HttpDelete("{id}")]
@@ -95,7 +95,7 @@ namespace Dot.Net.WebApi.Controllers
                 return NotFound($"Rating with ID {id} not found.");
             }
 
-            await _ratingService.DeleteAsync(id);
+            await _ratingService.DeleteAsync(existingRating.Id);
 
             return NoContent();
 

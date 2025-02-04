@@ -1,5 +1,8 @@
+using AutoMapper;
 using Dot.Net.WebApi.Domain;
+using Dot.Net.WebApi.Model;
 using Microsoft.AspNetCore.Mvc;
+using P7CreateRestApi.Data.Services;
 
 namespace Dot.Net.WebApi.Controllers
 {
@@ -7,52 +10,92 @@ namespace Dot.Net.WebApi.Controllers
     [Route("[controller]")]
     public class RuleNameController : ControllerBase
     {
-        // TODO: Inject RuleName service
+        private readonly IRuleNameService _ruleNameService;
+        private readonly IMapper _mapper;
+
+        public RuleNameController(IRuleNameService ruleNameService, IMapper mapper)
+        {
+            _ruleNameService = ruleNameService;
+            _mapper = mapper;
+        }
 
         [HttpGet]
-        [Route("list")]
         public IActionResult Home()
         {
-            // TODO: find all RuleName, add to model
-            return Ok();
+            var ruleNames = _ruleNameService.FindAllAsync();
+            var ruleNameViewModels = _mapper.Map<List<RuleNameViewModel>>(ruleNames);
+            return Ok(ruleNameViewModels);
         }
 
-        [HttpGet]
-        [Route("add")]
-        public IActionResult AddRuleName([FromBody]RuleName trade)
-        {
-            return Ok();
-        }
 
-        [HttpGet]
-        [Route("validate")]
-        public IActionResult Validate([FromBody]RuleName trade)
-        {
-            // TODO: check data valid and save to db, after saving return RuleName list
-            return Ok();
-        }
-
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
-        {
-            // TODO: get RuleName by Id and to model then show to the form
-            return Ok();
-        }
 
         [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateRuleName(int id, [FromBody] RuleName rating)
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> Create([FromBody]RuleNameViewModel tradeViewModel)
         {
-            // TODO: check required fields, if valid call service to update RuleName and return RuleName list
-            return Ok();
+            if (tradeViewModel == null || !ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            RuleName ruleName = _mapper.Map<RuleName>(tradeViewModel);
+            await _ruleNameService.AddAsync(ruleName);
+            return CreatedAtAction(nameof(Create), new { id = ruleName.Id }, ruleName);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteRuleName(int id)
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetEntity(int id)
         {
-            // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
+            var ruleName = await _ruleNameService.FindByIdAsync(id);
+            if (ruleName == null)
+            {
+                return NotFound($"RuleName with ID {id} not found.");
+            }
+
+            var ruleNameViewModel = _mapper.Map<RuleNameViewModel>(ruleName);
+
+            return Ok(ruleNameViewModel);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateRuleName(int id, [FromBody] RuleNameViewModel ratingViewModel)
+        {
+            if (ratingViewModel == null || id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var existingRuleName = await _ruleNameService.FindByIdAsync(id);
+            if (existingRuleName == null)
+            {
+                return NotFound($"RuleName with ID {id} not found.");
+            }
+            
+            _mapper.Map(ratingViewModel, existingRuleName);
+            await _ruleNameService.UpdateAsync(existingRuleName);
+
+            var updatedRuleName = _mapper.Map<RuleNameViewModel>(existingRuleName);
+            return Ok(updatedRuleName);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteRuleName(int id)
+        {
+            var existingRuleName = await _ruleNameService.FindByIdAsync(id);
+            if (existingRuleName == null)
+            {
+                return NotFound($"RuleName with ID {id} not found.");
+            }
+
+            await _ruleNameService.DeleteAsync(existingRuleName.Id);
             return Ok();
         }
     }

@@ -7,7 +7,7 @@ using P7CreateRestApi.Data.Services;
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("bidlists")]
+    [Route("[controller]")]
     public class BidListController : ControllerBase
     {
         private readonly IBidListService _bidListService;
@@ -72,7 +72,10 @@ namespace Dot.Net.WebApi.Controllers
 
             await _bidListService.UpdateAsync(existingBid); 
 
-            return Ok(existingBid);
+
+            var updatedBid = _mapper.Map<BidListViewModel>(existingBid);
+
+            return Ok(updatedBid);
         }
 
         [HttpDelete("{id}")]
@@ -86,7 +89,7 @@ namespace Dot.Net.WebApi.Controllers
                 return NotFound($"Bid with ID {id} not found.");
             }
 
-            await _bidListService.DeleteAsync(id); 
+            await _bidListService.DeleteAsync(existingBid.BidListId); 
 
             return NoContent();
         }

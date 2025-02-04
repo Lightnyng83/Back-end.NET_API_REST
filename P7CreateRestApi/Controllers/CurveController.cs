@@ -8,7 +8,7 @@ using P7CreateRestApi.Data.Services;
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
-    [Route("curvepoints")]
+    [Route("[controller]")]
     public class CurveController : ControllerBase
     {
         private readonly ICurvePointService _curvePointService;
@@ -81,7 +81,9 @@ namespace Dot.Net.WebApi.Controllers
 
             await _curvePointService.UpdateAsync(existingCurve);
 
-            return Ok(existingCurve);
+            var updatedCurve = _mapper.Map<CurvePointViewModel>(existingCurve);
+
+            return Ok(updatedCurve);
         }
 
         [HttpDelete("{id}")]
@@ -95,7 +97,7 @@ namespace Dot.Net.WebApi.Controllers
                 return NotFound($"Curve Point with ID {id} not found.");
             }
 
-            await _curvePointService.DeleteAsync(id);
+            await _curvePointService.DeleteAsync(existingCurve.Id);
 
             return NoContent();
         }

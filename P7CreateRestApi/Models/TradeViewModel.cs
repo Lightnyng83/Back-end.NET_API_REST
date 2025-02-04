@@ -3,7 +3,6 @@ namespace Dot.Net.WebApi.Model
 {
     public class TradeViewModel
     {
-        public int TradeId {get;set;}
         public string Account {get;set;}
         public string AccountType {get;set;}
         public double? BuyQuantity {get;set;}
