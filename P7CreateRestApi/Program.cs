@@ -21,6 +21,8 @@ JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+#region Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -47,7 +49,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
+#endregion
 
 #region Authentifications & Logs
 
@@ -78,6 +80,15 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<LocalDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;              // Au moins un chiffre
+    options.Password.RequiredLength = 8;                 // Au moins 8 caractères
+    options.Password.RequireNonAlphanumeric = true;      // Au moins un symbole (non alphanumérique)
+    options.Password.RequireUppercase = true;            // Au moins une lettre majuscule
+    options.Password.RequireLowercase = false;           // Facultatif : au moins une lettre minuscule (ici non imposé)
+});
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
