@@ -1,6 +1,8 @@
 using AutoMapper;
 using Dot.Net.WebApi.Controllers.Domain;
 using Dot.Net.WebApi.Controllers.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Data.Services;
 
@@ -8,6 +10,7 @@ namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
     [Route("ratings")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RatingController : ControllerBase
     {
         private readonly IRatingService _ratingService;
@@ -19,14 +22,14 @@ namespace Dot.Net.WebApi.Controllers
             _mapper = mapper;
         }
 
-        
+
 
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Create([FromBody]RatingViewModel ratingViewModel)
+        public async Task<IActionResult> Create([FromBody] RatingViewModel ratingViewModel)
         {
-            if(ratingViewModel == null || !ModelState.IsValid)
+            if (ratingViewModel == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }

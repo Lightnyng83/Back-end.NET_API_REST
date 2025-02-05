@@ -1,6 +1,5 @@
 ﻿using Dot.Net.WebApi.Data;
 using Dot.Net.WebApi.Domain;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace P7CreateRestApi.Data.Repositories

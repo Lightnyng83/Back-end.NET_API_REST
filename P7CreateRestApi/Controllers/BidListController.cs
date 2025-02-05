@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Data.Services;
 
@@ -8,6 +10,7 @@ namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
     [Route("bidlists")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BidListController : ControllerBase
     {
         private readonly IBidListService _bidListService;
@@ -31,7 +34,7 @@ namespace Dot.Net.WebApi.Controllers
 
             BidList bidList = _mapper.Map<BidList>(bidListViewModel);
 
-            await _bidListService.AddAsync(bidList); 
+            await _bidListService.AddAsync(bidList);
 
             return CreatedAtAction(nameof(Create), new { id = bidList.BidListId }, bidList);
         }
@@ -41,7 +44,7 @@ namespace Dot.Net.WebApi.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> ReadEntity(int id)
         {
-            var bidList = await _bidListService.FindByIdAsync(id); 
+            var bidList = await _bidListService.FindByIdAsync(id);
             if (bidList == null)
             {
                 return NotFound($"Bid with ID {id} not found.");
@@ -62,7 +65,7 @@ namespace Dot.Net.WebApi.Controllers
                 return BadRequest("Invalid data provided.");
             }
 
-            var existingBid = await _bidListService.FindByIdAsync(id); 
+            var existingBid = await _bidListService.FindByIdAsync(id);
             if (existingBid == null)
             {
                 return NotFound($"Bid with ID {id} not found.");
@@ -70,7 +73,7 @@ namespace Dot.Net.WebApi.Controllers
 
             _mapper.Map(bidList, existingBid);
 
-            await _bidListService.UpdateAsync(existingBid); 
+            await _bidListService.UpdateAsync(existingBid);
 
 
             var updatedBid = _mapper.Map<BidListViewModel>(existingBid);
@@ -83,13 +86,13 @@ namespace Dot.Net.WebApi.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteBid(int id)
         {
-            var existingBid = await _bidListService.FindByIdAsync(id); 
+            var existingBid = await _bidListService.FindByIdAsync(id);
             if (existingBid == null)
             {
                 return NotFound($"Bid with ID {id} not found.");
             }
 
-            await _bidListService.DeleteAsync(existingBid.BidListId); 
+            await _bidListService.DeleteAsync(existingBid.BidListId);
 
             return NoContent();
         }

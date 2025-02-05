@@ -1,6 +1,8 @@
 using AutoMapper;
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Data.Services;
 
@@ -9,6 +11,7 @@ namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
     [Route("curves")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CurveController : ControllerBase
     {
         private readonly ICurvePointService _curvePointService;
@@ -26,7 +29,7 @@ namespace Dot.Net.WebApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Create([FromBody] CurvePointViewModel curvePoint)
         {
-            if(curvePoint == null || !ModelState.IsValid)
+            if (curvePoint == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }

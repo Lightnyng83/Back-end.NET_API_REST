@@ -1,6 +1,8 @@
 using AutoMapper;
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Data.Services;
 
@@ -8,6 +10,7 @@ namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
     [Route("trades")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TradeController : ControllerBase
     {
         private readonly ITradeService _tradeService;
@@ -23,9 +26,9 @@ namespace Dot.Net.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> CreateTrade([FromBody]TradeViewModel tradeViewModel)
+        public async Task<IActionResult> CreateTrade([FromBody] TradeViewModel tradeViewModel)
         {
-            if(tradeViewModel == null || !ModelState.IsValid)
+            if (tradeViewModel == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -66,7 +69,7 @@ namespace Dot.Net.WebApi.Controllers
             {
                 return NotFound($"Trade with ID {id} not found.");
             }
-            
+
             _mapper.Map(tradeViewModel, existingTrade);
             await _tradeService.UpdateTradeAsync(existingTrade);
 

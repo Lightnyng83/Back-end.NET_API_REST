@@ -1,6 +1,8 @@
 using AutoMapper;
 using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Data.Services;
 
@@ -8,6 +10,7 @@ namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
     [Route("rulenames")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RuleNameController : ControllerBase
     {
         private readonly IRuleNameService _ruleNameService;
@@ -22,7 +25,7 @@ namespace Dot.Net.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Create([FromBody]RuleNameViewModel tradeViewModel)
+        public async Task<IActionResult> Create([FromBody] RuleNameViewModel tradeViewModel)
         {
             if (tradeViewModel == null || !ModelState.IsValid)
             {
@@ -66,7 +69,7 @@ namespace Dot.Net.WebApi.Controllers
             {
                 return NotFound($"RuleName with ID {id} not found.");
             }
-            
+
             _mapper.Map(ratingViewModel, existingRuleName);
             await _ruleNameService.UpdateAsync(existingRuleName);
 

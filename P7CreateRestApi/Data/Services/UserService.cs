@@ -9,8 +9,8 @@ namespace P7CreateRestApi.Data.Services
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<IdentityUser> _passwordHasher;
 
-        
-        public UserService(IUserRepository userRepository,IPasswordHasher<IdentityUser> passwordHasher)
+
+        public UserService(IUserRepository userRepository, IPasswordHasher<IdentityUser> passwordHasher)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;

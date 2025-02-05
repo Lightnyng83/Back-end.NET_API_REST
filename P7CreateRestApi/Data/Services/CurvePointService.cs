@@ -37,6 +37,6 @@ namespace P7CreateRestApi.Data.Services
             await _curvePointRepository.Update(curvePoint);
         }
 
-        
+
     }
 }

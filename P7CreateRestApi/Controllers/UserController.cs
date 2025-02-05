@@ -1,16 +1,16 @@
 using AutoMapper;
-using Dot.Net.WebApi.Domain;
 using Dot.Net.WebApi.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using P7CreateRestApi.Data.Repositories;
 using P7CreateRestApi.Data.Services;
-using P7CreateRestApi.Models;
 
 namespace Dot.Net.WebApi.Controllers
 {
     [ApiController]
     [Route("users")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -41,7 +41,7 @@ namespace Dot.Net.WebApi.Controllers
             var user = new IdentityUser
             {
                 UserName = model.Username,
-                
+
             };
 
             // Hache le mot de passe
@@ -58,7 +58,6 @@ namespace Dot.Net.WebApi.Controllers
             // Gestion des erreurs
             return BadRequest(result.Errors);
         }
-
 
 
         [HttpGet("{id}")]
@@ -114,11 +113,9 @@ namespace Dot.Net.WebApi.Controllers
                 return NotFound($"User with ID {id} not found.");
             }
 
-            await _userService.DeleteAsync(id);     
+            await _userService.DeleteAsync(id);
 
             return NoContent();
         }
-
-        
     }
 }

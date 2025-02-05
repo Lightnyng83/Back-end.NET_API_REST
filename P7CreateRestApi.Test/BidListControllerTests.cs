@@ -5,9 +5,6 @@ using Dot.Net.WebApi.Model;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using P7CreateRestApi.Data.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace P7CreateRestApi.Tests
 {
@@ -30,8 +27,8 @@ namespace P7CreateRestApi.Tests
         public async Task Create_ShouldReturnCreatedAtAction_WhenBidListIsCreated()
         {
             // Arrange
-            var bidListViewModel = new BidListViewModel { Account = "Account1",  BidQuantity = 10 };
-            var bidList = new BidList { BidListId = 1, Account = "Account1",  BidQuantity = 10 };
+            var bidListViewModel = new BidListViewModel { Account = "Account1", BidQuantity = 10 };
+            var bidList = new BidList { BidListId = 1, Account = "Account1", BidQuantity = 10 };
 
             _mapperMock.Setup(m => m.Map<BidList>(bidListViewModel)).Returns(bidList);
             _bidListServiceMock.Setup(s => s.AddAsync(bidList)).Returns(Task.CompletedTask);
@@ -66,8 +63,8 @@ namespace P7CreateRestApi.Tests
         {
             // Arrange
             int bidListId = 1;
-            var bidList = new BidList { BidListId = bidListId, Account = "Account1",  BidQuantity = 10 };
-            var bidListViewModel = new BidListViewModel { Account = "Account1",  BidQuantity = 10 };
+            var bidList = new BidList { BidListId = bidListId, Account = "Account1", BidQuantity = 10 };
+            var bidListViewModel = new BidListViewModel { Account = "Account1", BidQuantity = 10 };
 
             _bidListServiceMock.Setup(s => s.FindByIdAsync(bidListId)).ReturnsAsync(bidList);
             _mapperMock.Setup(m => m.Map<BidListViewModel>(bidList)).Returns(bidListViewModel);
@@ -102,8 +99,8 @@ namespace P7CreateRestApi.Tests
         {
             // Arrange
             int bidListId = 1;
-            var bidListViewModel = new BidListViewModel { Account = "UpdatedAccount",  BidQuantity = 20 };
-            var existingBid = new BidList { BidListId = bidListId, Account = "OldAccount",  BidQuantity = 10 };
+            var bidListViewModel = new BidListViewModel { Account = "UpdatedAccount", BidQuantity = 20 };
+            var existingBid = new BidList { BidListId = bidListId, Account = "OldAccount", BidQuantity = 10 };
 
             _bidListServiceMock.Setup(s => s.FindByIdAsync(bidListId)).ReturnsAsync(existingBid);
             _mapperMock.Setup(m => m.Map(bidListViewModel, existingBid)).Returns(existingBid);

@@ -1,5 +1,4 @@
 ﻿using Dot.Net.WebApi.Domain;
-using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Data.Repositories;
 
 namespace P7CreateRestApi.Data.Services
@@ -24,7 +23,7 @@ namespace P7CreateRestApi.Data.Services
 
         public async Task DeleteAsync(int id)
         {
-           await _bidListRepository.DeleteAsync(id);
+            await _bidListRepository.DeleteAsync(id);
         }
 
         public async Task<BidList> FindByIdAsync(int id)

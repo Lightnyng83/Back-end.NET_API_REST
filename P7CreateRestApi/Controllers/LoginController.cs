@@ -44,22 +44,46 @@ public class LoginController : ControllerBase
 
         return Unauthorized("Invalid username or password.");
     }
-    
+
 
     private string GenerateJwtToken(IdentityUser user)
     {
-        // Clés de signature pour JWT (récupérées depuis appsettings.json)
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        // Vérifier que l'utilisateur est valide
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+
+        if (string.IsNullOrEmpty(user.UserName))
+        {
+            throw new Exception("UserName est null ou vide.");
+        }
+
+        if (string.IsNullOrEmpty(user.Id))
+        {
+            throw new Exception("User Id est null ou vide.");
+        }
+
+        // Vérifier que la configuration JWT est présente
+        var jwtKey = _configuration["Jwt:Key"];
+        if (string.IsNullOrEmpty(jwtKey))
+        {
+            throw new Exception("La clé JWT n'est pas configurée.");
+        }
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         // Ajout des claims pour l'utilisateur
         var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Role, "User") // Exemple : rôle utilisateur
-        };
+  {
+    new Claim(ClaimTypes.Name, user.UserName), // <span style="color: green;">Ajoute ce claim pour renseigner Name</span>
+    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+    new Claim(ClaimTypes.NameIdentifier, user.Id),
+    new Claim(ClaimTypes.Role, "User")
+};
+
 
         // Création du token
         var token = new JwtSecurityToken(
@@ -72,6 +96,7 @@ public class LoginController : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
 }
 
 

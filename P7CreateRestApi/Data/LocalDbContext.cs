@@ -1,9 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Dot.Net.WebApi.Domain;
-using Dot.Net.WebApi.Controllers;
 using Dot.Net.WebApi.Controllers.Domain;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Dot.Net.WebApi.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dot.Net.WebApi.Data
 {
@@ -16,7 +15,7 @@ namespace Dot.Net.WebApi.Data
             base.OnModelCreating(builder);
         }
 
-        public DbSet<User> Users { get; set;}
+        public DbSet<User> Users { get; set; }
         public DbSet<Trade> Trades { get; set; }
         public DbSet<RuleName> RuleNames { get; set; }
         public DbSet<Rating> Ratings { get; set; }

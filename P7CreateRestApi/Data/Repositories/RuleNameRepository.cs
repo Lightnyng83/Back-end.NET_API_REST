@@ -11,7 +11,7 @@ namespace P7CreateRestApi.Data.Repositories
         {
             _dbContext = dbContext;
         }
-        
+
         public async Task AddAsync(RuleName ruleName)
         {
             await _dbContext.RuleNames.AddAsync(ruleName);

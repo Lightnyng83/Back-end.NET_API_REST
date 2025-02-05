@@ -28,7 +28,7 @@ namespace P7CreateRestApi.Data.Repositories
             DbContext.Users.Update(user);
             await DbContext.SaveChangesAsync();
         }
-        
+
         public async Task DeleteAsync(int id)
         {
             var del = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -38,6 +38,6 @@ namespace P7CreateRestApi.Data.Repositories
                 await DbContext.SaveChangesAsync();
             }
 
-        }  
+        }
     }
 }

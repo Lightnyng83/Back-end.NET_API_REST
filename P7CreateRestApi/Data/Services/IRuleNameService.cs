@@ -1,5 +1,4 @@
 ﻿using Dot.Net.WebApi.Domain;
-using P7CreateRestApi.Data.Repositories;
 
 namespace P7CreateRestApi.Data.Services
 {

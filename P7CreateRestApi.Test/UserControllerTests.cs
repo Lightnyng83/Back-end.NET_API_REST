@@ -6,11 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using P7CreateRestApi.Data.Repositories;
 using P7CreateRestApi.Data.Services;
-using P7CreateRestApi.Models;
 using P7CreateRestApi.Test;
-using Xunit;
 
 namespace P7CreateRestApi.Tests
 {
@@ -164,7 +161,7 @@ namespace P7CreateRestApi.Tests
             int userId = 1;
             var userViewModel = new UserViewModel
             {
-                
+
                 Username = "UpdatedUser",
                 Password = "UpdatedPassword"
             };
