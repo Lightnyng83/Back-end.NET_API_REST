@@ -1,0 +1,7 @@
+2025-03-03 10:11:35.768 +01:00 [INF] HTTP GET /swagger responded 301 in 6.9488 ms (User: Anonymous)
+2025-03-03 10:11:35.860 +01:00 [INF] HTTP GET /swagger/index.html responded 200 in 40.2500 ms (User: Anonymous)
+2025-03-03 10:11:35.915 +01:00 [INF] HTTP GET /swagger/swagger-ui.css responded 200 in 12.3639 ms (User: Anonymous)
+2025-03-03 10:11:35.940 +01:00 [INF] HTTP GET /swagger/swagger-ui-standalone-preset.js responded 200 in 36.9958 ms (User: Anonymous)
+2025-03-03 10:11:35.940 +01:00 [INF] HTTP GET /swagger/swagger-ui-bundle.js responded 200 in 37.0948 ms (User: Anonymous)
+2025-03-03 10:11:36.665 +01:00 [INF] HTTP GET /swagger/favicon-16x16.png responded 200 in 0.2907 ms (User: Anonymous)
+2025-03-03 10:11:36.762 +01:00 [INF] HTTP GET /swagger/v1/swagger.json responded 200 in 7.0522 ms (User: Anonymous)

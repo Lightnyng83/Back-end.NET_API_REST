@@ -34,9 +34,8 @@ namespace Dot.Net.WebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
-
             // Crée un utilisateur
             var user = new IdentityUser
             {

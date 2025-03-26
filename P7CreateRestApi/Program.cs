@@ -69,8 +69,7 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        // Assure-toi que les types de claim utilisés sont ceux que tu as définis lors de la création du token
-        NameClaimType = JwtRegisteredClaimNames.Sub, // ou "unique_name" selon ton token
+        NameClaimType = JwtRegisteredClaimNames.Sub,
         RoleClaimType = ClaimTypes.Role
     };
 });
@@ -83,7 +82,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.Password.RequireDigit = true;              // Au moins un chiffre
+    options.Password.RequireDigit = true;                // Au moins un chiffre
     options.Password.RequiredLength = 8;                 // Au moins 8 caractères
     options.Password.RequireNonAlphanumeric = true;      // Au moins un symbole (non alphanumérique)
     options.Password.RequireUppercase = true;            // Au moins une lettre majuscule

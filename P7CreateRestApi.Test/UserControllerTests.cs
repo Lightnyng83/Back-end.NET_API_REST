@@ -78,15 +78,17 @@ namespace P7CreateRestApi.Tests
             // Arrange
             _controller.ModelState.AddModelError("Username", "Username is required.");
 
-            var model = new UserViewModel();
+            var model = new UserViewModel(); // Username est null ici
 
             // Act
             var result = await _controller.Create(model);
 
             // Assert
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            var badRequestResult = Assert.IsType<BadRequestResult>(result);
             Assert.Equal(400, badRequestResult.StatusCode);
+
         }
+
 
         [Fact]
         public async Task Create_ShouldReturnBadRequest_WhenUserManagerFails()
