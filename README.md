@@ -37,3 +37,7 @@ You will need to implement **JWT Authentication** and **Authorization** using **
 
 If you have trouble connecting, first try to connection using Microsoft SQL Server Management Studio (make sure authentication type  is "Windows Authentication"), or refer to https://sqlserver-help.com/2011/06/19/help-whats-my-sql-server-name/.
 If you still have trouble, please ask your mentor for assistance.
+
+To connect for tester
+Username : string
+password : string
